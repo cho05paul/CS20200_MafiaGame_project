@@ -2,29 +2,26 @@
 
 ## Abstract
 
-This is a term project for CS-20200: Programing Principles in KAIST by 20230722 Hanbin Cho.
+This is a term project for **CS-20200: Programming Principles** at KAIST by 20230722 Hanbin Cho.
 
-This project aims to develop a semi-automatic text-based client of 'Werewolf game', which is widely known as 'Mafia game' in Korea.
+The project aims to develop a semi-automatic text-based "Game-Master" (GM) for the Werewolf game, widely known as "Mafia" in Korea. The GM automates role assignment, vote counting, ability application, and win-condition evaluation.
 
-This project is disigned to act as a automatic "Game-Master" of the Mafia game (WereWolf game), which assigns roles, counts votes, apply abilites, and evaluate game condition.
+**This project does not include chat service. It is meant to be designed as a GM, which enables secret voting, fair win condition evaluation, etc. Players are encouraged to discuss freely in ‘daytime’ by external method.**
 
-Built with F# and .NET 10
+Built with **F#** and **.NET 10**.
+
+---
 
 ## Getting started
-
-
 
 ### Prerequisites
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
-
-  Verify with: '''dotnet --version''' (should show '''10.x.x''')
+- Verify installation: `dotnet --version` (Expected: `10.x.x`)
 
 ### Run
 
-
 *TBA*
-
 
 ### Build
 
@@ -34,7 +31,11 @@ Built with F# and .NET 10
 
 ## Board (UI) Layout
 
-*TBA*
+The game board displays player statuses in a grid format:
+
+- Players are numbered 1 to n, which represents the turn order.
+- Layout: Two lines of squares (single line if n < 5).
+- The UI updates dynamically after each night/day to reflect deaths and abilities.
 
 ---
 
@@ -59,7 +60,7 @@ Here is the basic format for initialization command:
 - Number of total players
 - Whether to reveal dead players' roles (Default: false)
 - Whether to include 'special roles' and how many special roles should be included (Default: 0, Max: TBA)
-- Time limit (Default: infinite)
+- Turn limit (Default: infinite)
 - Number of Mafias(Werewolves), Doctors, Sheriffs(Seer) (Not mandatory)
 
 ---
@@ -93,8 +94,8 @@ For each player's turn,
 
 At the end of each night/day, the game automatically checks 'Game condition'.
 
-- If there is no more Mafias or Mafian special roles alive, Civilians win.
-- 
+- If there is no more Mafia members alive, Civilian win.
+- If the number of remaining Mafia members equals or exceeds the number of remaining Civilian members, Mafia win.
 
 ### Roles
 
@@ -105,7 +106,9 @@ At the end of each night/day, the game automatically checks 'Game condition'.
 #### Planned Roles
 
 - Civilian
-  - Civilian: No special ability. (Default role for civilian team)
+  - Civilian: No special ability. (Default role for civilian members)
+  - Doctor: Heal a player every night to prevent him from murdered by mafias. The heal is only noticed when a player's life is saved.
+  - Sheriff: Investigate a player every night to find out whether that player is a mafia or not. A sheriff cannot find out mafian special roles, like spy or hostess.
   - Soldier: Can block mafia's murder once per a game. Can discover mafian special role who used its ability to him.
   - Politician: Not executed by voting.
   - GraveRobber: Get a role of player who is killed in the first night
@@ -121,6 +124,10 @@ At the end of each night/day, the game automatically checks 'Game condition'.
 Name: Hanbin Cho
 
 Affiliation: 20230722
+
+## Use of Large Language Models (LLM)
+
+What I used the LLM for: Grammatical/content revision for README.md and Requirements document (May be added if LLM is used for further development)
 
 ## Reference
 
