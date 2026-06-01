@@ -64,20 +64,20 @@ Squares numbered 1~n (which user specified) in one line
 
 To initialize the game, you should enter basic settings including the number of total players.
 
-Here is the basic format for initialization command:
+Here is the example for initialization command (you should enter the bold part):
 
 === CS20200 CLI Mafia Game ===
 Press Enter to start.
 
 Game Master Initialization
 
-Enter total number of players: 8
-Enter number of Mafias: 2
-Enter number of Doctors: 1
-Enter number of Sheriffs: 1
-Enter number of civilian special roles(Max. 3): 3
-Enter number of mafian special roles(Max. 2): 1
-Enter turn limit: 7
+Enter total number of players: **8**
+Enter number of Mafias: **2**
+Enter number of Doctors: **1**
+Enter number of Sheriffs: **1**
+Enter number of civilian special roles(Max. 3): **3**
+Enter number of mafian special roles(Max. 2): **1**
+Enter turn limit: **7**
 
 ---
 
@@ -108,7 +108,7 @@ For each player's turn,
 
 ### End of game
 
-At the end of each night/day, the game automatically checks 'Game condition'.
+At the start of each night/day, the game automatically checks 'Game condition'.
 
 - If there is no more Mafia members alive, Civilian win.
 - If the number of remaining Mafia members equals or exceeds the number of remaining Civilian members, Mafia win.
@@ -143,7 +143,8 @@ Affiliation: 20230722
 
 ## Use of Large Language Models (LLM)
 
-What I used the LLM for: Grammatical/content revision for README.md and Requirements document (May be added if LLM is used for further development)
+What I used the LLM(Gemini Pro) for: Grammatical/content revision for README.md and Requirements document (May be added if LLM is used for further development)
+Specific coding site: The overall revision and 'mafian message' part, because it was keep bugging. In the first time, the LLM was not quite understanding the intention (ex. Keep moving the hostess ability to night or implementing inappropriate messaging mechanism). However, after some conversation and repromting, LLM succeeded to point out my 'cleanup' sequence for the messages were inappropriate, so I could solve the problem.
 
 ## Reference
 
