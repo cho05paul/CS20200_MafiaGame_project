@@ -21,14 +21,21 @@ Built with **F#** and **.NET 10**.
 
 ### Run
 
-Windows
+Windows: 
+
 run.bat
 
-Unix / macOS
+
+Unix / macOS: 
+
 chmod +x run.sh
+
+
 ./run.sh
 
+
 Or directly
+
 dotnet run
 
 ### Build
@@ -59,17 +66,18 @@ To initialize the game, you should enter basic settings including the number of 
 
 Here is the basic format for initialization command:
 
-*TBA*
+=== CS20200 CLI Mafia Game ===
+Press Enter to start.
 
----
+Game Master Initialization
 
-#### Plan (What GM can set)
-
-- Number of total players
-- Whether to reveal dead players' roles (Default: false)
-- Whether to include 'special roles' and how many special roles should be included (Default: 0, Max: TBA)
-- Turn limit (Default: infinite)
-- Number of Mafias(Werewolves), Doctors, Sheriffs(Seer) (Not mandatory)
+Enter total number of players: 8
+Enter number of Mafias: 2
+Enter number of Doctors: 1
+Enter number of Sheriffs: 1
+Enter number of civilian special roles(Max. 3): 3
+Enter number of mafian special roles(Max. 2): 1
+Enter turn limit: 7
 
 ---
 
@@ -82,8 +90,8 @@ For each day/night, all 'alive' players should take their turns, using their 'ab
 For each player's turn,
 
 1. You are asked to type "Yes" and press enter, to prevent your previous player from knowing your role.
-2. The current board and role is printed.
-3. You are prompted: '''Your vote (1-n):''' or '''Use your ability to (1-n):''' or '''You have nothing to do. Type your own number(x):'''
+2. The current turn, board, your role and number is printed.
+3. You are prompted: "Your vote (1-n):" or "Select a player to use ability (1-n):" or "You have no special abilities tonight. Type any number to skip:"
 4. Type an appropriate number and press Enter.
 5. Hand the terminal to the next player.
 
@@ -132,8 +140,6 @@ Affiliation: 20230722
 What I used the LLM for: Grammatical/content revision for README.md and Requirements document (May be added if LLM is used for further development)
 
 ## Reference
-
-*TBA*
 
 Ideas got from **Mafia42** by *TEAM42*
 
