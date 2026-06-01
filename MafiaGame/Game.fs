@@ -42,14 +42,14 @@ let runNightTurn (player: Player) (state: GameState) =
 
     if player.Temptation = true then
         printfn "You are tempted by hostess! You cannot use any ability today."
-        printf "Type any number to skip: "
+        printf "Type 'Yes' to skip: "
         Console.ReadLine() |> ignore
         state
     else
         match player.Role with
         | Civilian | Soldier | GraveRobber | Politician | Hostess ->
             printfn "You have no special abilities tonight."
-            printf "Type any number to skip: "
+            printf "Type 'Yes' to skip: "
             Console.ReadLine() |> ignore
             state
         | Doctor ->
