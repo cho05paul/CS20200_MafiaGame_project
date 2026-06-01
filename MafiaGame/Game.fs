@@ -40,17 +40,25 @@ let runNightTurn (player: Player) (state: GameState) =
     printfn "Your Secret Role: %A\n" player.Role
     printfn "Your Number: %d\n" player.Id
 
-    if player.Temptation = true then
+    if player.Temptation && not (player.Role = Mafia || player.Role = Spy || player.Role = Hostess) then
         printfn "You are tempted by hostess! You cannot use any ability today."
-        printf "Type 'Yes' to skip: "
-        Console.ReadLine() |> ignore
+        let rec loop () =
+            printf "Type 'Yes' to skip: "
+            let input = Option.ofObj (Console.ReadLine()) |> Option.defaultValue ""
+            if input.Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase) then ()
+            else loop ()
+        loop ()
         state
     else
         match player.Role with
         | Civilian | Soldier | GraveRobber | Politician | Hostess ->
             printfn "You have no special abilities tonight."
-            printf "Type 'Yes' to skip: "
-            Console.ReadLine() |> ignore
+            let rec loop () =
+                printf "Type 'Yes' to skip: "
+                let input = Option.ofObj (Console.ReadLine()) |> Option.defaultValue ""
+                if input.Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase) then ()
+                else loop ()
+            loop ()
             state
         | Doctor ->
             let target = getValidTarget state.Players "Select a player to heal (1-n): "
@@ -64,30 +72,69 @@ let runNightTurn (player: Player) (state: GameState) =
             Console.ReadLine() |> ignore
             state
         | Mafia ->
+            if not state.HostessMessage.IsEmpty then
+                printfn "\n=== Incoming Secret Messages ==="
+                state.HostessMessage |> List.iter (printfn " %s")
+                printfn "================================\n"
             let target = getValidTarget state.Players "Select a player to murder (1-n): "
             { state with MafiaVotes = target :: state.MafiaVotes }
         | Spy ->
+            if not state.HostessMessage.IsEmpty then
+                printfn "\n=== Incoming Secret Messages ==="
+                state.HostessMessage |> List.iter (printfn " %s")
+                printfn "================================\n"
             let target = getValidTarget state.Players "Select a player to investigate (1-n): "
             let targetRole = (state.Players |> List.find (fun p -> p.Id = target)).Role
             printfn "\n[Investigation Result] Player %d is %s." target (string targetRole)
+            
+            let nextMessages =
+                if targetRole = Mafia then
+                    printfn "\nYou contacted with Mafia! You can leave a secret message for your team (max 100 letters)."
+                    printf "Enter message (or press Enter to skip): "
+                    let msg = Console.ReadLine()
+                    if not (String.IsNullOrWhiteSpace(msg)) then
+                        let truncated = if msg.Length > 100 then msg.Substring(0, 100) else msg
+                        sprintf "[Spy %d]: %s" player.Id truncated :: state.SpyMessage
+                    else state.SpyMessage
+                else state.SpyMessage
+
             printfn "Press Enter to end your turn."
             Console.ReadLine() |> ignore
-            state
-
+            {state with SpyMessage = nextMessages}
 
 let runDayTurn (player: Player) (state: GameState) =
     maskTurn player.Id
-    printfn "Night %d" state.TurnNumber
+    printfn "Day %d" state.TurnNumber
     printBoard state.Players
     printfn "Your Role: %A\n" player.Role
     printfn "Your Number: %d\n" player.Id
+
+    let isMafiaTeam = player.Role = Mafia || player.Role = Hostess
+    if isMafiaTeam && not state.SpyMessage.IsEmpty then
+        printfn "\n=== Incoming Secret Messages ==="
+        state.SpyMessage |> List.iter (printfn " %s")
+        printfn "================================\n"
+    
     let target = getValidTarget state.Players "Select a player to vote for execution (1-n): "
+    let targetRole = (state.Players |> List.find (fun p -> p.Id = target)).Role
+
+    let nextMessages = 
+        if player.Role = Hostess && targetRole = Mafia then
+            printfn "\nYou seduced a Mafia! You can leave a secret message for your team (max 100 letters)."
+            printf "Enter message (or press Enter to skip): "
+            let msg = Console.ReadLine()
+            if not (String.IsNullOrWhiteSpace(msg)) then
+                let truncated = if msg.Length > 100 then msg.Substring(0, 100) else msg
+                sprintf "[Hostess %d]: %s" player.Id truncated :: state.HostessMessage
+            else state.HostessMessage
+        else state.HostessMessage
+
     let updatedPlayers =
         if player.Role = Hostess then
             state.Players |> List.map (fun p -> if p.Id = target then { p with Temptation = true } else p)
         else
             state.Players
-    { state with Votes = Map.add player.Id target state.Votes; Players = updatedPlayers }
+    { state with Votes = Map.add player.Id target state.Votes; Players = updatedPlayers; HostessMessage = nextMessages }
 
 let initGame playerCount mafias doctors sheriffs civSpRoles mafSpRoles turnLimit =
     let rnd = Random()
@@ -114,7 +161,7 @@ let initGame playerCount mafias doctors sheriffs civSpRoles mafSpRoles turnLimit
         shuffledRoles
         |> List.mapi (fun i r -> { Id = i + 1; Role = r; IsAlive = true; UsedAbility = false; Temptation = false })
 
-    { Players = players; CurrentPhase = Night; TurnNumber = 1; MafiaVotes = []; DoctorHeal = None; Votes = Map.empty }
+    { Players = players; CurrentPhase = Night; TurnNumber = 1; MafiaVotes = []; DoctorHeal = None; Votes = Map.empty; SpyMessage = []; HostessMessage = [] }
 
 let rec gameLoop (state: GameState, turnLimit: int option) =
     match checkWinCondition (state.Players, state.TurnNumber, turnLimit) with

@@ -125,12 +125,12 @@ At the end of each night/day, the game automatically checks 'Game condition'.
 - Mafian
   - For all mafian special roles: If they use their ability to mafia, they can send a message (<100 letters) to mafias that night. (Sent to mafias the next day)
   - Spy: Can check one player's role every night.
-  - Hostess: Neutralize the ability of voting target until next night ends. (Ex. If a hostess vote to a politician, he can be executed by voting in that day)
+  - Hostess: Neutralize the ability of voting target until next night ends. (Ex. If a hostess vote to a politician, he can be executed by voting in that day) Mafia teammates are not tempted by hostess.
 
 ---
 
 ## Requirement Changes
-Because if mafian special role's order is prior to mafias, the message cannot be handed to mafias. Therefore, the messages are written in that night, and shown to mafias at next day's voting phase.
+Because if mafian special role's order is prior to mafias, the message cannot be handed to mafias. Therefore, the message by spy(written at night) is shown next day(voting phase), and the message by hostess(written at voting phase) is shown next night.
 
 
 ---

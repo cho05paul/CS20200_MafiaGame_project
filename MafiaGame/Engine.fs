@@ -70,7 +70,7 @@ let evaluateNight (state: GameState) =
             | _ -> updatedPlayers
         else updatedPlayers
 
-    let nextState = { state with Players = finalPlayers; CurrentPhase = Day; MafiaVotes = []; DoctorHeal = None }
+    let nextState = { state with Players = finalPlayers; CurrentPhase = Day; MafiaVotes = []; DoctorHeal = None; SpyMessage = state.SpyMessage; HostessMessage = [] }
     result, nextState
 
 let evaluateDay (state: GameState) =
@@ -107,5 +107,5 @@ let evaluateDay (state: GameState) =
     
     let updatedPlayers = List.map updatePlayer state.Players
 
-    let nextState = { state with Players = updatedPlayers; CurrentPhase = Night; TurnNumber = state.TurnNumber + 1; Votes = Map.empty }
+    let nextState = { state with Players = updatedPlayers; CurrentPhase = Night; TurnNumber = state.TurnNumber + 1; Votes = Map.empty; SpyMessage = []; HostessMessage = state.HostessMessage }
     result, nextState

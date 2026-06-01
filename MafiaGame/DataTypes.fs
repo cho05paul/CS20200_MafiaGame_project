@@ -32,6 +32,8 @@ type GameState = {
     MafiaVotes: int list
     DoctorHeal: int option
     Votes: Map<int, int> // VoterId -> TargetId
+    SpyMessage: string list
+    HostessMessage: string list
 }
 
 type NightResult =
