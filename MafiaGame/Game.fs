@@ -65,7 +65,7 @@ let runNightTurn (player: Player) (state: GameState) =
             state
         | Mafia ->
             let target = getValidTarget state.Players "Select a player to murder (1-n): "
-            { state with MafiaTarget = Some target }
+            { state with MafiaVotes = target :: state.MafiaVotes }
         | Spy ->
             let target = getValidTarget state.Players "Select a player to investigate (1-n): "
             let targetRole = (state.Players |> List.find (fun p -> p.Id = target)).Role
@@ -114,7 +114,7 @@ let initGame playerCount mafias doctors sheriffs civSpRoles mafSpRoles turnLimit
         shuffledRoles
         |> List.mapi (fun i r -> { Id = i + 1; Role = r; IsAlive = true; UsedAbility = false; Temptation = false })
 
-    { Players = players; CurrentPhase = Night; TurnNumber = 1; MafiaTarget = None; DoctorHeal = None; Votes = Map.empty }
+    { Players = players; CurrentPhase = Night; TurnNumber = 1; MafiaVotes = []; DoctorHeal = None; Votes = Map.empty }
 
 let rec gameLoop (state: GameState, turnLimit: int option) =
     match checkWinCondition (state.Players, state.TurnNumber, turnLimit) with

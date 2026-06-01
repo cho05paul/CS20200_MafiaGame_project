@@ -14,9 +14,28 @@ let checkWinCondition (players: Player list, turn: int, turnLimit: int option) =
     else Ongoing
 
 let evaluateNight (state: GameState) =
+    let random = Random()
+
+    // Resolve mafia votes
+    let finalMafiaTarget =
+        match state.MafiaVotes with
+        | [] -> None // No Mafias voted (or no Mafias alive)
+        | votes ->
+            let voteCounts = 
+                votes 
+                |> List.countBy id 
+                |> List.sortByDescending snd
+            let maxCount = snd (List.head voteCounts)
+            let tiedTargets = 
+                voteCounts 
+                |> List.filter (fun (_, count) -> count = maxCount)
+                |> List.map fst
+            let pickedTarget = tiedTargets.[random.Next(tiedTargets.Length)]
+            Some pickedTarget
+    
     // Determine the result of the Mafia's murder
     let result =
-        match state.MafiaTarget with
+        match finalMafiaTarget with
         | Some target ->
             if state.DoctorHeal = Some target then 
                 Healed target
@@ -33,7 +52,7 @@ let evaluateNight (state: GameState) =
     let updatePlayer p =
         match result with
         | Murdered id when id = p.Id -> { p with IsAlive = false; Temptation = false }
-        | BlockedBySoldier _ when p.Role = Soldier && p.Id = Option.get state.MafiaTarget -> 
+        | BlockedBySoldier _ when p.Role = Soldier && p.Id = Option.get finalMafiaTarget -> 
             { p with UsedAbility = true; Temptation = false }
         | _ -> { p with Temptation = false } // Hostess temptation expires at the end of the night
 
@@ -51,7 +70,7 @@ let evaluateNight (state: GameState) =
             | _ -> updatedPlayers
         else updatedPlayers
 
-    let nextState = { state with Players = finalPlayers; CurrentPhase = Day; MafiaTarget = None; DoctorHeal = None }
+    let nextState = { state with Players = finalPlayers; CurrentPhase = Day; MafiaVotes = []; DoctorHeal = None }
     result, nextState
 
 let evaluateDay (state: GameState) =

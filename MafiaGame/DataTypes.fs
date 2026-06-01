@@ -29,7 +29,7 @@ type GameState = {
     Players: Player list
     CurrentPhase: Phase
     TurnNumber: int
-    MafiaTarget: int option
+    MafiaVotes: int list
     DoctorHeal: int option
     Votes: Map<int, int> // VoterId -> TargetId
 }
