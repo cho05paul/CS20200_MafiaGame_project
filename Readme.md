@@ -21,11 +21,19 @@ Built with **F#** and **.NET 10**.
 
 ### Run
 
-*TBA*
+Windows
+run.bat
+
+Unix / macOS
+chmod +x run.sh
+./run.sh
+
+Or directly
+dotnet run
 
 ### Build
 
-*TBA*
+dotnet build
 
 ### How to Play
 
@@ -34,14 +42,14 @@ Built with **F#** and **.NET 10**.
 The game board displays player statuses in a grid format:
 
 - Players are numbered 1 to n, which represents the turn order.
-- Layout: Two lines of squares (single line if n < 5).
+- Layout: Single line of squares.
 - The UI updates dynamically after each night/day to reflect deaths and abilities.
 
 ---
 
 #### Plan
 
-Squares numbered 1~n (which user specified) in two lines (one line if n < 5)
+Squares numbered 1~n (which user specified) in one line
 
 ---
 
@@ -98,12 +106,6 @@ At the end of each night/day, the game automatically checks 'Game condition'.
 - If the number of remaining Mafia members equals or exceeds the number of remaining Civilian members, Mafia win.
 
 ### Roles
-
-*TBA*
-
----
-
-#### Planned Roles
 
 - Civilian
   - Civilian: No special ability. (Default role for civilian members)

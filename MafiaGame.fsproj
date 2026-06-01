@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="MafiaGame/DataTypes.fs" />
+    <Compile Include="MafiaGame/Engine.fs" />
+    <Compile Include="MafiaGame/Game.fs" />
+    <Compile Include="MafiaGame/Program.fs" />
+  </ItemGroup>
+
+</Project>
